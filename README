@@ -18,8 +18,8 @@ it is compatible with the expectations of PHP 4 and PHP 5 session handlers.
         ------------------------ COMPILATION ------------------------
 
 
-libevent (http://naughty.monkey.org/~provos/libevent/) must be installed on
-your system, with development files (headers). Version >= 0.9 is needed.
+libevent (http://libevent.org/) must be installed on your system, with
+development files (headers).
 
 Then, follow the boring traditional procedure:
 
