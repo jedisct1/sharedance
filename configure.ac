@@ -15,8 +15,9 @@ AC_PROG_INSTALL
 AC_PROG_CC
 AC_AIX
 AC_ISC_POSIX
+AC_USE_SYSTEM_EXTENSIONS
 
-CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE=1 -I/usr/local/include"
+CPPFLAGS="$CPPFLAGS -I/usr/local/include"
 LDFLAGS="$LDFLAGS -L/usr/local/lib"
 
 if uname | fgrep SunOS > /dev/null 2> /dev/null ; then

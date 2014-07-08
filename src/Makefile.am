@@ -1,6 +1,6 @@
 localedir = $(datadir)/locale
 
-INCLUDES = -DLOCALEDIR=\"$(localedir)\"
+sharedanced_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
 
 sbin_PROGRAMS = \
 	sharedanced
