@@ -99,7 +99,7 @@ static void clearargs(int argc, char **argv)
 #endif
 }
 
-static void setprogname(const char * const title)
+static void set_progname(const char * const title)
 {
 #ifndef NO_PROCNAME_CHANGE
 # ifdef HAVE_SETPROCTITLE
@@ -332,11 +332,11 @@ int main(int argc, char *argv[])
     }
     if (expire_pid == (pid_t) 0) {
         (void) close(listen_fd);
-        setprogname("sharedanced [CLEANUP]");
+        set_progname("sharedanced [CLEANUP]");
         expire();
         _exit(0);
     }
-    setprogname("sharedanced [SERVER]");
+    set_progname("sharedanced [SERVER]");
     event_init();
     signal_set(&sigchld_ev, SIGCHLD, sigchld, &ev);
     signal_add(&sigchld_ev, NULL);
