@@ -1,0 +1,162 @@
+
+                              .:. SHAREDANCE .:.
+                         Documentation for version 0.6
+
+
+           ------------------------ BLURB ------------------------
+
+
+Sharedance is a high-performance server that centralize ephemeral key/data
+pairs on remote hosts, without the overhead and the complexity of an SQL
+database.
+
+It was mainly designed to share caches and sessions between a pool of web
+servers. Access to a sharedance server is trivial through a simple PHP API and
+it is compatible with the expectations of PHP 4 and PHP 5 session handlers.
+
+
+        ------------------------ COMPILATION ------------------------
+
+
+libevent (http://naughty.monkey.org/~provos/libevent/) must be installed on
+your system, with development files (headers). Version >= 0.9 is needed.
+
+Then, follow the boring traditional procedure:
+
+./configure
+make install-strip
+
+For details, have a look at the INSTALL file.
+
+The software has been successfully tested on Linux 2.4, Linux 2.6 and OpenBSD.
+
+
+            ------------------------ USAGE ------------------------
+
+
+In order to store the data, Sharedance needs an empty directory to begin with.
+By default, it will pick /tmp/sharedance, but you're strongly encouraged to
+change this. If you're not planning to store huge data and if you need extreme
+speed, use a memory filesystem like tmpfs (Linux/Solaris) or mfs (BSD).
+As tons of files can be created in this directory, a modern filesystem like
+ReiserFS or UFS+dirhash is strongly recommended.
+
+The simplest way to start the daemon is something like:
+
+/usr/local/sbin/sharedanced --directory=/var/tmp/sharedance --daemonize
+
+The target directory has to exist before you run that command.
+Two processes should run: "sharedanced [SERVER]" that accepts new connections
+and stores/fetches/deletes the data, and "sharedanced [CLEANUP]" that purges
+expired entries.
+
+If something goes wrong, try to remove the --daemonize switch to get a
+(hopefully) informative error message.
+
+Sharedance listens to TCP port 1042 by default.
+
+The php/sharedance.php file contains basic PHP functions to connect and use
+the Sharedance server. Those functions can be included and reused in custom
+applications. php/test_sharedance.php is such a sample application.
+
+The php/session_handler.php file is what you should include before every
+script in order to use Sharedance to store PHP sessions.
+
+Copy the 'php' directory in a suitable location like /opt/sharedance/php .
+
+Then edit the /opt/sharedance/php/session_handler.php file and change the
+value of SESSION_HANDLER_HOST from 'localhost' to the name or IP address of
+the server running sharedanced.
+
+Next, edit your php.ini file and change:
+
+auto_prepend_file=
+
+to:
+
+auto_prepend_file=/opt/sharedance/php/session_handler.php
+
+Then, change:
+
+session.save_handler = files
+
+to:
+
+session.save_handler = user
+
+Alternatively you can just include session_handler.php on top of your scripts,
+but don't do both (auto_prepend_file *or* require_once 'session_handler.php').
+
+Restart Apache, do the same thing on every web server of the pool and sessions
+are now automagically shared.
+
+
+           ------------------------ OPTIONS ------------------------
+
+
+Extra run-time options can be fed to sharedanced:
+
+--ip=xxx          (-i) listen to this address (default=any)
+--port=xxx        (-p) listen to that port (default=1042)
+--backlog=xxx     (-b) change the backlog
+--directory=xxx   (-d) directory where the data should be stored
+--readsize=xxx    (-r) read buffer size
+--maxreadsize=xxx (-R) max read size
+--expiration=xxx  (-e) expiration of data in seconds
+--timeout=xxx     (-t) disconnect after xxx seconds without data
+--debug           (-D) verbose debug mode
+--daemonize       (-B) operate in background
+--uid=xxx         (-u) change user id
+--gid=xxx         (-g) change group id
+
+The backlog and the read buffer size probably don't need to be changed except
+on extremely busy web sites.
+
+By default, a key/data pair can be up to 32 Mb large. This is a huge default.
+Start the server with that value and reduce it later according to the largest
+files you get in the work directory.
+
+Without the --expiration switch, a key/data pair expires after 60 minutes of
+inactivity.
+
+
+    ------------------------ IMPLEMENTATION DESIGN ------------------------
+
+
+- Sharedance was written in a non-blocking, non-forking fashion in order to
+get an excellent scalability. Thanks to libevent, it can take advantage of
+BSD's kqueue and Linux 2.6 epoll_*() interfaces.
+
+- data is sent through mapped memory.
+
+- Sharedance has been written with security in mind. Care has been taken to
+avoid buffer overflows, processes are chroot()ed to the working directory are
+privileges are definitely revoked after the listening socket has been
+created.
+
+
+        ------------------------ SYSTEM TUNING ------------------------
+
+
+If you're planning to receive a lot of connections, you'll probably have to
+tune your operating system accordingly before starting sharedanced.
+
+Increase the number of descriptors. For instance on Linux:
+/sbin/sysctl -w fs.file-max=65536
+ulimit -n 65536
+
+Increase the range for TCP outgoing ports. Linux:
+/sbin/sysctl -w net.ipv4.ip_local_port_range="1024 65000"
+
+
+   ------------------------ DOWNLOADING SHAREDANCE ------------------------
+
+
+Sharedance home page is: http://sharedance.pureftpd.org/ .
+
+Sharedance mailing-list: http://sharedance.pureftpd.org/ml/
+
+
+Thank you, 
+
+                        -Frank DENIS "Jedi/Sector One" <j@pureftpd.org> .

@@ -1,0 +1,27 @@
+* Version 0.6:
+ - The Nagle algorithm has been disabled in the PHP handler when sending
+small requests.
+ - Updated getopt_long() and snprintf() reimplementations from pure-ftpd
+1.0.21.
+ - Log messages are now in local time.
+
+* Version 0.5:
+ - The PHP session handler and the examples were fixed.
+ - The daemon is now less verbose.
+ - Daemonization is now properly working.
+
+* Version 0.4:
+ - Files are now properly truncated and filled atomically.
+ - Documentation has been updated.
+
+* Version 0.3:
+ - Some documentation has been written.
+ - sharedanced is now chroot()ed in the work directory and it can drop root
+privileges.
+
+* Version 0.2:
+ - Better PHP examples in the php/ directory.
+
+* Version 0.1:
+ - Initial revision, untested, undocumented.
+
