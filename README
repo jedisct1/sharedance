@@ -116,7 +116,7 @@ By default, a key/data pair can be up to 32 Mb large. This is a huge default.
 Start the server with that value and reduce it later according to the largest
 files you get in the work directory.
 
-Without the --expiration switch, a key/data pair expires after 60 minutes of
+Without the --expiration switch, a key/data pair expires after 30 minutes of
 inactivity.
 
 
