@@ -243,7 +243,6 @@ static int client_process_fetch(Client * const client)
         return -1;
     }
     logfile(LOG_DEBUG, _("[%s] = fd #%d"), store_file, client->read_fd);
-    ALLOCA_FREE(store_file);
     if (fstat(client->read_fd, &st) != 0 || st.st_size <= (off_t) 0) {        
         logfile(LOG_DEBUG, _("Unable to stat a previous key (%s) : [%s]"),
                 store_file, strerror(errno));
@@ -262,6 +261,7 @@ static int client_process_fetch(Client * const client)
         ALLOCA_FREE(store_file);
         return -1;
     }
+    ALLOCA_FREE(store_file);
     client->read_mapped_zone_length = st.st_size;
     if ((client->returncode_bufev =
          bufferevent_new(client->client_fd,
