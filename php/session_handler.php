@@ -40,6 +40,8 @@ function session_handler_gc($timeout) {
     return TRUE;
 }
 
+ini_set('session.serialize_handler', 'php_serialize');
+
 session_set_save_handler('session_handler_open', 'session_handler_close',
                          'session_handler_fetch', 'session_handler_store',
                          'session_handler_delete', 'session_handler_gc');
