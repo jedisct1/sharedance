@@ -368,7 +368,7 @@ static void client_read(const int client_fd, short event, void *client_)
         } else {
             logfile(LOG_DEBUG,
                     _("Descriptor #%d has disconnected with error [%s]"),
-                    strerror(errno));
+                    client->client_fd, strerror(errno));
         }
         client_disconnect(client);
         return;
@@ -376,7 +376,7 @@ static void client_read(const int client_fd, short event, void *client_)
     client->offset_read_buf += readen;
     logfile(LOG_DEBUG, _("Activity on client #%d (%d) offset=%lu"),
             client->client_fd, event,
-            (unsigned int) client->offset_read_buf);
+            (unsigned long) client->offset_read_buf);
     if (client->client_command == CC_UNDEF) {
         if (client->read_buf[0] == CC_FETCH &&
             client->offset_read_buf > 5) {
