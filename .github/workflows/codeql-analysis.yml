@@ -20,6 +20,8 @@ jobs:
     - run: git checkout HEAD^2
       if: ${{ github.event_name == 'pull_request' }}
       
+    - run: sudo apt-get install -qy libevent-dev
+      
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v1
 

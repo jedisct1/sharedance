@@ -28,7 +28,7 @@ make install-strip
 
 For details, have a look at the INSTALL file.
 
-The software has been successfully tested on Linux 2.4, Linux 2.6 and OpenBSD.
+The software has been successfully tested on Linux and OpenBSD.
 
 
             ------------------------ USAGE ------------------------
@@ -125,7 +125,7 @@ Fetching data does not extend the data lifetime.
 
 - Sharedance was written in a non-blocking, non-forking fashion in order to
 get an excellent scalability. Thanks to libevent, it can take advantage of
-BSD's kqueue and Linux 2.6 epoll_*() interfaces.
+BSD's kqueue and Linux epoll_*() interfaces.
 
 - data is sent through mapped memory.
 
@@ -147,16 +147,3 @@ ulimit -n 65536
 
 Increase the range for TCP outgoing ports. Linux:
 /sbin/sysctl -w net.ipv4.ip_local_port_range="1024 65000"
-
-
-   ------------------------ DOWNLOADING SHAREDANCE ------------------------
-
-
-Sharedance home page is: http://sharedance.pureftpd.org/ .
-
-Sharedance mailing-list: http://sharedance.pureftpd.org/ml/
-
-
-Thank you, 
-
-                        -Frank DENIS <j [at] pureftpd [dot] org>
