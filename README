@@ -6,7 +6,7 @@
            ------------------------ BLURB ------------------------
 
 
-Sharedance is a high-performance server that centralize ephemeral key/data
+Sharedance is a high-performance server that centralizes ephemeral key/data
 pairs on remote hosts, without the overhead and the complexity of an SQL
 database.
 
@@ -130,8 +130,8 @@ BSD's kqueue and Linux epoll_*() interfaces.
 - data is sent through mapped memory.
 
 - Sharedance has been written with security in mind. Care has been taken to
-avoid buffer overflows, processes are chroot()ed to the working directory are
-privileges are definitely revoked after the listening socket has been
+avoid buffer overflows, processes are chroot()ed to the working directory and
+privileges are revoked after the listening socket has been
 created.
 
 
