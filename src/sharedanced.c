@@ -88,7 +88,16 @@ static void clearargs(int argc, char **argv)
         while (env_nb > 0U) {
             env_nb--;
             /* Can any bad thing happen if strdup() ever fails? */
-            new_environ[env_nb] = strdup(environ[env_nb]);
+            if ((new_environ[env_nb] = strdup(environ[env_nb])) == NULL) {
+                unsigned int temp_env_nb = env_nb;
+                unsigned int orig_env_nb = env_nb;
+                while (temp_env_nb < (1U + orig_env_nb)) {
+                    free(new_environ[temp_env_nb]);
+                    temp_env_nb++;
+                }
+                free(new_environ);
+                abort();
+            }
         }
         environ = new_environ;
     }
