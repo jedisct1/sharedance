@@ -383,15 +383,15 @@ static void client_read(const int client_fd, short event, void *client_)
         if (client->read_buf[0] == CC_FETCH &&
             client->offset_read_buf > 5) {
             client->key_len =
-                client->read_buf[1] << 24 | client->read_buf[2] << 16 |
-                client->read_buf[3] << 8 | client->read_buf[4];
+                (size_t) client->read_buf[1] << 24 | (size_t) client->read_buf[2] << 16 |
+                (size_t) client->read_buf[3] << 8 | (size_t) client->read_buf[4];
             client->total_len = (size_t) 1U + (size_t) 4U + client->key_len;
             client->client_command = CC_FETCH;
         } else if (client->read_buf[0] == CC_DELETE &&
             client->offset_read_buf > 5) {
             client->key_len =
-                client->read_buf[1] << 24 | client->read_buf[2] << 16 |
-                client->read_buf[3] << 8 | client->read_buf[4];
+                (size_t) client->read_buf[1] << 24 | (size_t) client->read_buf[2] << 16 |
+                (size_t) client->read_buf[3] << 8 | (size_t) client->read_buf[4];
             client->total_len = (size_t) 1U + (size_t) 4U + client->key_len;
             client->client_command = CC_DELETE;
         } else if (client->read_buf[0] == CC_STORE &&
