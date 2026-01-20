@@ -1,3 +1,11 @@
+* Version 0.7:
+ - Fixed mmap() error checking to use MAP_FAILED instead of NULL.
+ - Fixed undefined behavior in bitshift operations when parsing protocol.
+ - Fixed null pointer dereference when bufferevent creation fails.
+ - Fixed DELETE command being rejected as unknown in certain conditions.
+ - Updated PHP session handler to use SessionHandlerInterface for PHP 8+.
+ - Updated test scripts for modern PHP compatibility.
+
 * Version 0.6:
  - The Nagle algorithm has been disabled in the PHP handler when sending
 small requests.

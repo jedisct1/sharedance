@@ -12,9 +12,7 @@ if (!isset($_SESSION['test'])) {
     $_SESSION['test']++;
 }
 
-header('Content-Type: text/plain');
-
 echo 'You reloaded that page ' . $_SESSION['test'] . ' time(s).' . "\n" .
-  'Your session link is: [' . SID . ']' . "\n";
+  'Your session id is: [' . session_id() . ']' . "\n";
 
 ?>

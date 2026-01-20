@@ -1,6 +1,6 @@
 
                               .:. SHAREDANCE .:.
-                         Documentation for version 0.6
+                         Documentation for version 0.7
 
 
            ------------------------ BLURB ------------------------
@@ -12,7 +12,7 @@ database.
 
 It was mainly designed to share caches and sessions between a pool of web
 servers. Access to a sharedance server is trivial through a simple PHP API and
-it is compatible with the expectations of PHP 4 and PHP 5 session handlers.
+it is compatible with PHP 8+ session handlers using SessionHandlerInterface.
 
 
         ------------------------ COMPILATION ------------------------
