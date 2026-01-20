@@ -202,6 +202,7 @@ static int client_process_store(Client * const client)
                          client)) == NULL) {
         logfile(LOG_WARNING, _("Unable to create a bufferevent for fd #%d"),
                 client->client_fd);
+        return -1;
     }
     (void) bufferevent_write(client->returncode_bufev, (void *) RETURNCODE_OK,
                              sizeof RETURNCODE_OK - (size_t) 1U);
@@ -273,6 +274,7 @@ static int client_process_fetch(Client * const client)
                          client)) == NULL) {
         logfile(LOG_WARNING, _("Unable to create a bufferevent for fd #%d"),
                 client->client_fd);
+        return -1;
     }
     (void) bufferevent_write(client->returncode_bufev,
                              client->read_mapped_zone,
@@ -322,6 +324,7 @@ static int client_process_delete(Client * const client)
                          client)) == NULL) {
         logfile(LOG_WARNING, _("Unable to create a bufferevent for fd #%d"),
                 client->client_fd);
+        return -1;
     }
     (void) bufferevent_write(client->returncode_bufev, (void *) RETURNCODE_OK,
                              sizeof RETURNCODE_OK - (size_t) 1U);
@@ -397,17 +400,18 @@ static void client_read(const int client_fd, short event, void *client_)
         } else if (client->read_buf[0] == CC_STORE &&
             client->offset_read_buf > 9) {
             client->key_len =
-                client->read_buf[1] << 24 | client->read_buf[2] << 16 |
-                client->read_buf[3] << 8 | client->read_buf[4];
+                (size_t) client->read_buf[1] << 24 | (size_t) client->read_buf[2] << 16 |
+                (size_t) client->read_buf[3] << 8 | (size_t) client->read_buf[4];
             client->data_len =
-                client->read_buf[5] << 24 | client->read_buf[6] << 16 |
-                client->read_buf[7] << 8 | client->read_buf[8];
+                (size_t) client->read_buf[5] << 24 | (size_t) client->read_buf[6] << 16 |
+                (size_t) client->read_buf[7] << 8 | (size_t) client->read_buf[8];
             client->total_len = (size_t) 1U + (size_t) 4U + (size_t) 4U +
                 client->key_len + client->data_len;
             client->client_command = CC_STORE;
         } else if (client->offset_read_buf > 0 &&
                    client->read_buf[0] != CC_STORE &&
-                   client->read_buf[0] != CC_FETCH) {
+                   client->read_buf[0] != CC_FETCH &&
+                   client->read_buf[0] != CC_DELETE) {
             logfile(LOG_WARNING, _("Unknown command [%d], good bye."),
                     (int) client->read_buf[0]);
             client_disconnect(client);
