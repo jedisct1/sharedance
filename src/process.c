@@ -46,7 +46,8 @@ static void client_disconnect(Client * const client)
         (void) close(client->client_fd);
         client->client_fd = -1;
     }
-    if (client->read_mapped_zone != NULL) {
+    if (client->read_mapped_zone != NULL &&
+        client->read_mapped_zone != MAP_FAILED) {
         (void) munmap(client->read_mapped_zone,
                       client->read_mapped_zone_length);
         client->read_mapped_zone = NULL;
@@ -253,9 +254,10 @@ static int client_process_fetch(Client * const client)
     }
     if ((client->read_mapped_zone = mmap(NULL, st.st_size, PROT_READ,
                                          MAP_SHARED, client->read_fd,
-                                         (off_t) 0)) == NULL) {
+                                         (off_t) 0)) == MAP_FAILED) {
         logfile(LOG_WARNING, _("Unable to map in memory: [%s]"),
                 strerror(errno));
+        client->read_mapped_zone = NULL;
         (void) close(client->read_fd);
         client->read_fd = -1;
         ALLOCA_FREE(store_file);
