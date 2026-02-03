@@ -8,7 +8,7 @@
 
 * Version 0.6:
  - The Nagle algorithm has been disabled in the PHP handler when sending
-small requests.
+   small requests.
  - Updated getopt_long() and snprintf() reimplementations from pure-ftpd
 1.0.21.
  - Log messages are now in local time.
