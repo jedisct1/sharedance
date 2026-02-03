@@ -1,6 +1,6 @@
 AC_PREREQ(2.58)
 
-AC_INIT([sharedance],[0.6],[bugs@pureftpd.org])
+AC_INIT([sharedance],[0.7],[bugs@pureftpd.org])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([1.9 dist-bzip2])
 AC_CONFIG_LIBOBJ_DIR(src)

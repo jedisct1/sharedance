@@ -4,46 +4,56 @@ define('SESSION_HANDLER_HOST', 'localhost');
 
 require_once('sharedance.php');
 
-function session_handler_open($save_path, $session_name)
+class SharedanceSessionHandler implements SessionHandlerInterface
 {
-    if (sharedance_open(SESSION_HANDLER_HOST) !== 0) {
-        return FALSE;
+    public function open(string $path, string $name): bool
+    {
+        if (sharedance_open(SESSION_HANDLER_HOST) !== 0) {
+            return false;
+        }
+        return true;
     }
-    return TRUE;
-}
 
-function session_handler_close() {
-    sharedance_close();
-    
-    return TRUE;
-}
-
-function session_handler_store($key, $data) {
-    if (sharedance_store($key, $data) !== 0) {
-        return FALSE;
+    public function close(): bool
+    {
+        sharedance_close();
+        return true;
     }
-    return TRUE;
-}
 
-function session_handler_fetch($key) {
-    return sharedance_fetch($key);
-}
-
-function session_handler_delete($key) {
-    if (sharedance_delete($key) !== 0) {
-        return FALSE;
+    public function read(string $id): string|false
+    {
+        $data = sharedance_fetch($id);
+        if ($data === false || $data === -1) {
+            return '';
+        }
+        return $data;
     }
-    return TRUE;
-}
 
-function session_handler_gc($timeout) {
-    return TRUE;
+    public function write(string $id, string $data): bool
+    {
+        if (sharedance_store($id, $data) !== 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function destroy(string $id): bool
+    {
+        if (sharedance_delete($id) !== 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function gc(int $max_lifetime): int|false
+    {
+        return 0;
+    }
 }
 
 ini_set('session.serialize_handler', 'php_serialize');
 
-session_set_save_handler('session_handler_open', 'session_handler_close',
-                         'session_handler_fetch', 'session_handler_store',
-                         'session_handler_delete', 'session_handler_gc');
+$handler = new SharedanceSessionHandler();
+session_set_save_handler($handler, true);
 
 ?>
